@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback, Camera.Preview
     companion object {
         private const val PERMISSION_REQUEST = 1
         private const val CLASS_PATH = "com/anprsystemsltd/anpr/android/demo/so/ol/MainActivity;;"   // your activity package
-        private const val LIBRARY_NAME = "_ISR_Israel" // if the ANPR so library file name is 'lib_ISR_Israel.so'; lib prefix is necessary!
+        private const val LIBRARY_NAME = "_EE_2016_andoid10" // if the ANPR so library file name is '_EE_2016_andoid10.so'; lib prefix is necessary!
 
         private val permissions = listOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback, Camera.Preview
         }
 
         if (anprOutputDecoder.numberOfChars > 0) {
-            val recognizedString = charsToString(anprOutputDecoder.charBuffer)
+            val recognizedString = charsToString(anprOutputDecoder.charBuffer, anprOutputDecoder.numberOfChars)
             if (recognizedString == lastRecognizedString) {
                 recognizingConunter++
                 if (recognizingConunter >= 2) {
@@ -273,12 +273,12 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback, Camera.Preview
         }.create().show()
     }
 
-    private fun charsToString(chars: CharArray) =
+    private fun charsToString(chars: CharArray, charCount: Int = 100) =
         StringBuilder().apply {
-            chars.forEach {
-                if (it.toInt() != 0) {
-                    append(it)
-                }
+            for (i in 0 .. charCount) {
+                val c = chars[i]
+                if (c.toInt() == 0) return@apply
+                append(c)
             }
         }.toString()
 
