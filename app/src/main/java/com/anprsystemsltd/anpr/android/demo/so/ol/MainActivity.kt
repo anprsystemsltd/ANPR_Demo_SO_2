@@ -29,10 +29,9 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback, Camera.Preview
     companion object {
         private const val PERMISSION_REQUEST = 1
         private const val CLASS_PATH = "com/anprsystemsltd/anpr/android/demo/so/ol/MainActivity;;"   // your activity package
-        private const val LIBRARY_NAME = "_EE_2016_andoid10" // if the ANPR so library file name is '_EE_2016_andoid10.so'; lib prefix is necessary!
+        private const val LIBRARY_NAME = "_HUN_Hungary" // if the ANPR so library file name is '_HUN_Hungary.so'; lib prefix is necessary!
 
         private val permissions = listOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.CAMERA
         )
@@ -238,7 +237,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback, Camera.Preview
 
     private fun writeClassPathFile() : Boolean =
         try {
-            val file = File("/sdcard/class.txt")
+            val file = File(filesDir.absolutePath + "/class.txt")
             if (!file.exists()) file.createNewFile()
             FileOutputStream(file).use {
                 it.write(CLASS_PATH.toByteArray())

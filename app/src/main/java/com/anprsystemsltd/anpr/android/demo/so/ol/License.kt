@@ -18,7 +18,6 @@ import java.util.*
 class License() {
 
     companion object {
-        private const val DOWNLOADED_LICENSE_FILE_PATH = "/sdcard/anprlicense.txt"
         private const val LICENSE_SERVER_URL = "http://anprlicense.eu/android/android_get_licens.php"
     }
 
@@ -26,9 +25,12 @@ class License() {
 
     private var deviceId = ""
 
+    private lateinit var licenceFilePath: String
+
     fun getDeviceId() = deviceId
 
     fun processLicense(context: Context) {
+        licenceFilePath = context.filesDir.absolutePath + "/anprlicense.txt"
         deviceId = readDeviceId(context)
         if (checkDownloadedLicense()) {
             checkLicenseLiveData.value = true
@@ -39,7 +41,7 @@ class License() {
 
     private fun checkDownloadedLicense() : Boolean {
         try {
-            val file = File(DOWNLOADED_LICENSE_FILE_PATH)
+            val file = File(licenceFilePath)
             if (file.exists()) {
                 FileInputStream(file).use {
                     val content = it.readBytes().toString(Charset.defaultCharset())
@@ -62,7 +64,7 @@ class License() {
             try {
                 val connection = URL(LICENSE_SERVER_URL + "?imei=" + deviceId).openConnection() as HttpURLConnection
                 val content = connection.inputStream.bufferedReader().readText()
-                val file = File(DOWNLOADED_LICENSE_FILE_PATH)
+                val file = File(licenceFilePath)
                 FileOutputStream(file).use { fos ->
                     fos.writer().use {
                         val licensStart = content.indexOf("(licens)")
@@ -80,7 +82,7 @@ class License() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             readAndroidId(context)
         } else {
-            readImei(context) ?: readSerial()
+            readImei(context) ?: readAndroidId(context)
         }
 
     @SuppressLint("HardwareIds")
@@ -94,12 +96,4 @@ class License() {
         null
     }
 
-    @SuppressLint("MissingPermission")
-    private fun readSerial() : String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        try {
-            Build.getSerial()
-        } catch (e: Exception) { "" }
-    } else {
-        Build.SERIAL
-    }
 }
