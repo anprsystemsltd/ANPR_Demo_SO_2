@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback, Camera.Preview
     companion object {
         private const val PERMISSION_REQUEST = 1
         private const val CLASS_PATH = "com/anprsystemsltd/anpr/android/demo/so/ol/MainActivity;;"   // your activity package
-        private const val LIBRARY_NAME = "_NOR_Norway" // if the ANPR so library file name is '_NOR_Norway.so'; lib prefix is necessary!
+        private const val LIBRARY_NAME = "_ISR_Israel" // if the ANPR so library file name is 'lib_ISR_Israel.so'; lib prefix is necessary!
 
         private val permissions = listOf(
             Manifest.permission.READ_PHONE_STATE,
